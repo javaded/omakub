@@ -10,13 +10,28 @@ if [[ -n "$dbs" ]]; then
 	for db in $dbs; do
 		case $db in
 		MySQL)
-			sudo docker run -d --restart unless-stopped -p "127.0.0.1:3306:3306" --name=mysql8 -e MYSQL_ROOT_PASSWORD= -e MYSQL_ALLOW_EMPTY_PASSWORD=true mysql:8.4
+			# Check if MySQL is installed
+			if ! docker ps -q -f name=mysql8; then
+				sudo docker run -d --restart unless-stopped -p "127.0.0.1:3306:3306" --name=mysql8 -e MYSQL_ROOT_PASSWORD= -e MYSQL_ALLOW_EMPTY_PASSWORD=true mysql:8.4
+			else
+				echo "MySQL is already installed."
+			fi
 			;;
 		Redis)
-			sudo docker run -d --restart unless-stopped -p "127.0.0.1:6379:6379" --name=redis redis:7
+			# Check if Redis is installed
+			if ! docker ps -q -f name=redis; then
+				sudo docker run -d --restart unless-stopped -p "127.0.0.1:6379:6379" --name=redis redis:7
+			else
+				echo "Redis is already installed."
+			fi
 			;;
 		PostgreSQL)
-			sudo docker run -d --restart unless-stopped -p "127.0.0.1:5432:5432" --name=postgres16 -e POSTGRES_HOST_AUTH_METHOD=trust postgres:16
+			# Check if PostgreSQL is installed
+			if ! docker ps -q -f name=postgres16; then
+				sudo docker run -d --restart unless-stopped -p "127.0.0.1:5432:5432" --name=postgres16 -e POSTGRES_HOST_AUTH_METHOD=trust postgres:16
+			else
+				echo "PostgreSQL is already installed."
+			fi
 			;;
 		esac
 	done

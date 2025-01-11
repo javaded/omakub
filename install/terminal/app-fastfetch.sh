@@ -1,7 +1,13 @@
-# Display system information in the terminal
-sudo add-apt-repository -y ppa:zhangsongcui3371/fastfetch
-sudo apt update -y
-sudo apt install -y fastfetch
+# Check if fastfetch is installed before adding repository and installing
+if ! dpkg -l | grep -q fastfetch; then
+  echo "Fastfetch is not installed. Installing..."
+  # Display system information in the terminal
+  sudo add-apt-repository -y ppa:zhangsongcui3371/fastfetch
+  sudo apt update -y
+  sudo apt install -y fastfetch
+else 
+  echo "Fastfetch is already installed."
+fi
 
 # Only attempt to set configuration if fastfetch is not already set
 if [ ! -f "$HOME/.config/fastfetch/config.jsonc" ]; then

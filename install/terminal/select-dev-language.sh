@@ -10,35 +10,75 @@ if [[ -n "$languages" ]]; then
 	for language in $languages; do
 		case $language in
 		Ruby)
-			mise use --global ruby@3.3
-			mise x ruby -- gem install rails --no-document
-			;;
+			# check if ruby is installed
+			if ! command -v ruby &> /dev/null; then
+				mise use --global ruby@3.3
+				mise x ruby -- gem install rails --no-document
+			else
+                echo "Ruby and Rails are already installed."
+            fi
+            ;;
 		Node.js)
-			mise use --global node@lts
-			;;
+			# Check if Node.js is installed
+            if ! command -v node &>/dev/null; then
+                mise use --global node@lts
+            else
+                echo "Node.js is already installed."
+            fi
+            ;;
 		Go)
-			mise use --global go@latest
+			# Check if Go is installed
+			if ! command -v go &> /dev/null; then
+				mise use --global go@latest
+			else
+				echo "Go is already installed."
+			fi
 			;;
 		PHP)
-			sudo add-apt-repository -y ppa:ondrej/php
-			sudo apt -y install php8.3 php8.3-{curl,apcu,intl,mbstring,opcache,pgsql,mysql,sqlite3,redis,xml,zip}
-			php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-			php composer-setup.php --quiet && sudo mv composer.phar /usr/local/bin/composer
-			rm composer-setup.php
+		    # Check if PHP is installed
+			if ! command -v php &>/dev/null; then
+				sudo add-apt-repository -y ppa:ondrej/php
+				sudo apt -y install php8.3 php8.3-{curl,apcu,intl,mbstring,opcache,pgsql,mysql,sqlite3,redis,xml,zip}
+				php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+				php composer-setup.php --quiet && sudo mv composer.phar /usr/local/bin/composer
+				rm composer-setup.php
+            else
+                echo "PHP is already installed."
+            fi
 			;;
 		Python)
-			mise use --global python@latest
+			# Check if Python is installed
+			if ! command -v python &> /dev/null; then
+				mise use --global python@latest
+			else
+				echo "Python is already installed."
+			fi
 			;;
 		Elixir)
-			mise use --global erlang@latest
-			mise use --global elixir@latest
-			mise x elixir -- mix local.hex --force
+			# Check if Elixir is installed
+			if ! command -v elixir &> /dev/null; then
+				mise use --global erlang@latest
+				mise use --global elixir@latest
+				mise x elixir -- mix local.hex --force
+			else
+				echo "Elixir is already installed."
+			fi
 			;;
 		Rust)
-			bash -c "$(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs)" -- -y
+			# Check if Rust is installed
+            if ! command -v rustc &>/dev/null; then
+				bash -c "$(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs)" -- -y
+            else
+                echo "Rust is already installed."
+            fi
 			;;
 		Java)
-			mise use --global java@latest
+			# Check if Java is installed
+            if ! command -v java &>/dev/null; then
+                mise use --global java@latest
+            else
+                echo "Java is already installed."
+            fi
 			;;
 		esac
 	done
